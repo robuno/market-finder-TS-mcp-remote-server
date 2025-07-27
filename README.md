@@ -1,50 +1,99 @@
-# Building a Remote MCP Server on Cloudflare (Without Auth)
+# Market Price Finder MCP Server
 
-This example allows you to deploy a remote MCP server that doesn't require authentication on Cloudflare Workers. 
+This project is a Model Context Protocol (MCP) server built on Cloudflare Workers that helps find and compare market prices for products. It provides tools for querying and analyzing product prices across different marketplaces.
 
-## Get started: 
+An MCP server is a specialized server that implements the Model Context Protocol, allowing AI models to interact with external tools and services. In this case, our server provides tools for market price analysis.
+
+## Features
+- Query product prices from various marketplaces
+- Compare prices across different vendors
+- Real-time price updates
+- No authentication required for basic usage
+- Deployable on Cloudflare Workers platform
+
+## Getting Started
+
+### Option 1: Quick Deploy
+Click the button below to deploy directly to Cloudflare Workers:
 
 [![Deploy to Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/ai/tree/main/demos/remote-mcp-authless)
 
-This will deploy your MCP server to a URL like: `remote-mcp-server-authless.<your-account>.workers.dev/sse`
+After deployment, your server will be available at: `remote-mcp-server-authless.<your-account>.workers.dev/sse`
 
-Alternatively, you can use the command line below to get the remote MCP Server created on your local machine:
+### Option 2: Local Development
+To set up the project locally, follow these steps:
+
+1. Create a new project using the template:
 ```bash
 npm create cloudflare@latest -- my-mcp-server --template=cloudflare/ai/demos/remote-mcp-authless
 ```
 
-## Customizing your MCP Server
+2. Install dependencies:
+```bash
+cd my-mcp-server
+npm install
+```
 
-To add your own [tools](https://developers.cloudflare.com/agents/model-context-protocol/tools/) to the MCP server, define each tool inside the `init()` method of `src/index.ts` using `this.server.tool(...)`. 
+3. Start the development server:
+```bash
+npm run dev
+```
 
-## Connect to Cloudflare AI Playground
+## Customizing the Server
 
-You can connect to your MCP server from the Cloudflare AI Playground, which is a remote MCP client:
+### Adding New Tools
+You can extend the server's functionality by adding your own tools:
 
-1. Go to https://playground.ai.cloudflare.com/
-2. Enter your deployed MCP server URL (`remote-mcp-server-authless.<your-account>.workers.dev/sse`)
-3. You can now use your MCP tools directly from the playground!
+1. Open `src/index.ts`
+2. Locate the `init()` method
+3. Add new tools using `this.server.tool(...)` 
 
-## Connect Claude Desktop to your MCP server
+For more information about creating tools, check the [MCP tools documentation](https://developers.cloudflare.com/agents/model-context-protocol/tools/).
 
-You can also connect to your remote MCP server from local MCP clients, by using the [mcp-remote proxy](https://www.npmjs.com/package/mcp-remote). 
+## Using the Server
 
-To connect to your MCP server from Claude Desktop, follow [Anthropic's Quickstart](https://modelcontextprotocol.io/quickstart/user) and within Claude Desktop go to Settings > Developer > Edit Config.
+### Method 1: Cloudflare AI Playground
+The easiest way to interact with your MCP server is through the Cloudflare AI Playground:
 
-Update with this configuration:
+1. Visit [Cloudflare AI Playground](https://playground.ai.cloudflare.com/)
+2. In the connection settings, enter your server URL:
+   - For deployed server: `remote-mcp-server-authless.<your-account>.workers.dev/sse`
+   - For local development: `http://localhost:8787/sse`
+3. Start using the market price finder tools through the playground interface
 
+### Method 2: Claude Desktop Integration
+You can also use the server with Claude Desktop:
+
+1. Install the MCP remote proxy:
+```bash
+npm install -g mcp-remote
+```
+
+2. Configure Claude Desktop:
+- Open Claude Desktop
+- Go to Settings > Developer > Edit Config
+- Update the configuration:
 ```json
 {
   "mcpServers": {
-    "calculator": {
+    "market-finder": {
       "command": "npx",
       "args": [
         "mcp-remote",
-        "http://localhost:8787/sse"  // or remote-mcp-server-authless.your-account.workers.dev/sse
+        "http://localhost:8787/sse"  // Use your deployed URL for production
       ]
     }
   }
 }
 ```
 
-Restart Claude and you should see the tools become available. 
+3. Restart Claude Desktop to apply changes
+
+## API Documentation
+
+Our MCP server provides the following tools:
+- `searchProduct`: Search for product prices
+- `comparePrice`: Compare prices across marketplaces
+- `getPriceHistory`: Get historical price data (if available)
+
+For detailed API documentation and examples, check the source code comments in `src/index.ts`. 
