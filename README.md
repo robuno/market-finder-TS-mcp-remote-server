@@ -1,4 +1,4 @@
-# Market Price Finder MCP Server
+# Market Price Finder MCP Server written in TypeScript (Cloudflare Workers Deployment)
 
 This project is a Model Context Protocol (MCP) server built on Cloudflare Workers that helps find and compare market prices for products. It provides tools for querying and analyzing product prices across different marketplaces.
 
